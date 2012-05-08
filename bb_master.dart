@@ -7,32 +7,34 @@ void main() {
 		CanvasElement canvas = document.query('#bb');
 		CanvasRenderingContext2D ctx = canvas.getContext("2d");
 		List<int> coords;
+		int left_offset, top_offset;
+
+		Future<ElementRect> f = canvas.rect; f.then((ElementRect rect) {
+			left_offset = rect.offset.left;
+			top_offset = rect.offset.top;
+		});
 
 		canvas.on.mouseDown.add( (MouseEvent e) {
 			mouseDown = true;
 			ctx.beginPath();
 			coords = [];
-			Future<ElementRect> f = canvas.rect; f.then((ElementRect rect) {
-				int x = e.clientX - rect.offset.left;
-				int y = e.clientY - rect.offset.top;
-				coords.add(x);
-				coords.add(y);
-				print("mouseDown = true x = ${x} y = ${y}");
-				ctx.moveTo(x, y);
-			});
+			int x = e.clientX - left_offset;
+			int y = e.clientY - top_offset;
+			coords.add(x);
+			coords.add(y);
+			print("mouseDown = true x = ${x} y = ${y}");
+			ctx.moveTo(x, y);
 		});
 
 		canvas.on.mouseMove.add( (MouseEvent e) {
 			if (mouseDown) {
-				Future<ElementRect> f = canvas.rect; f.then((ElementRect rect) {
-					int x = e.clientX - rect.offset.left;
-					int y = e.clientY - rect.offset.top;
-					ctx.lineTo(x, y);
-					coords.add(x);
-					coords.add(y);
-					ctx.stroke();
-					print("stroke x = ${x} y = ${y}");
-				});
+				int x = e.clientX - left_offset;
+				int y = e.clientY - top_offset;
+				ctx.lineTo(x, y);
+				coords.add(x);
+				coords.add(y);
+				ctx.stroke();
+				print("stroke x = ${x} y = ${y}");
 			}
 		});
 
@@ -43,6 +45,7 @@ void main() {
 				mouseDown = false;
 				print("mouseDown = false");
 				ws_send.send(JSON.stringify(coords));
+				coords = [];
 			}
 		});
 	});
