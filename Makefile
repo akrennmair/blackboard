@@ -6,7 +6,7 @@ GOSRC=$(wildcard *.go)
 all: $(JS_SRC) $(GOBIN)
 
 %.dart.js: %.dart
-	$$DART_SDK/bin/frogc --enable-type-checks $< || ( $(RM) $@ && exit 1 )
+	$$DART_SDK/bin/dart2js --out=$@ $< || ( $(RM) $@ && exit 1 )
 
 $(GOBIN): $(GOSRC)
 	go build -o $@
