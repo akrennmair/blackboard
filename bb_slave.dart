@@ -1,12 +1,12 @@
-#import('dart:html');
-#import('dart:json');
+import 'dart:html';
+import 'dart:json' as JSON;
 
 void main() {
 	CanvasElement canvas = document.query('#bb');
 	CanvasRenderingContext2D ctx = canvas.getContext("2d");
 
 	WebSocket ws_recv = new WebSocket("ws://" + window.location.host + "/recvdata");
-	ws_recv.on.message.add((event) {
+	ws_recv.onMessage.listen((event) {
 		print("received data: ${event.data}");
 		List<int> coords = JSON.parse(event.data);
 		ctx.beginPath();

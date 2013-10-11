@@ -1,5 +1,6 @@
-#import('dart:html');
-#import('dart:json');
+import 'dart:html';
+import 'dart:json' as JSON;
+import 'dart:async';
 
 void main() {
 	print("entered main");
@@ -9,12 +10,10 @@ void main() {
 	List<int> coords;
 	int left_offset, top_offset;
 
-	Future<ElementRect> f = canvas.rect; f.then((ElementRect rect) {
-		left_offset = rect.offset.left;
-		top_offset = rect.offset.top;
-	});
+	left_offset = canvas.client.left;
+	top_offset = canvas.client.top;
 
-	canvas.on.mouseDown.add( (MouseEvent e) {
+	canvas.onMouseDown.listen( (MouseEvent e) {
 		mouseDown = true;
 		ctx.beginPath();
 		coords = [];
@@ -26,7 +25,7 @@ void main() {
 		ctx.moveTo(x, y);
 	});
 
-	canvas.on.mouseMove.add( (MouseEvent e) {
+	canvas.onMouseMove.listen( (MouseEvent e) {
 		if (mouseDown) {
 			int x = e.clientX - left_offset;
 			int y = e.clientY - top_offset;
@@ -40,7 +39,7 @@ void main() {
 
 	WebSocket ws_send = new WebSocket("ws://" + window.location.host + "/senddata");
 
-	canvas.on.mouseUp.add( (MouseEvent e) {
+	canvas.onMouseUp.listen( (MouseEvent e) {
 		if (mouseDown) {
 			mouseDown = false;
 			print("mouseDown = false");

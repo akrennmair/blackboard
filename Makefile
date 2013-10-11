@@ -6,11 +6,11 @@ GOSRC=$(wildcard *.go)
 all: $(JS_SRC) $(GOBIN)
 
 %.dart.js: %.dart
-	$$DART_SDK/bin/dart2js --out=$@ $< || ( $(RM) $@ && exit 1 )
+	$$DART_SDK/bin/dart2js -o $@ $<
 
 $(GOBIN): $(GOSRC)
 	go build -o $@
 
 clean:
-	$(RM) $(JS_SRC) $(GOBIN)
+	$(RM) $(JS_SRC) $(GOBIN) *.deps *.map *.precompiled.js
 
