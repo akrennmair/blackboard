@@ -6,7 +6,7 @@ void main() {
 	print("entered main");
 	bool mouseDown = false;
 	CanvasElement canvas = document.query('#bb');
-	CanvasRenderingContext2D ctx = canvas.getContext("2d");
+	CanvasRenderingContext2D ctx = canvas.context2D;
 	List<int> coords;
 	int left_offset, top_offset;
 

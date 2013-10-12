@@ -3,7 +3,7 @@ import 'dart:json' as JSON;
 
 void main() {
 	CanvasElement canvas = document.query('#bb');
-	CanvasRenderingContext2D ctx = canvas.getContext("2d");
+	CanvasRenderingContext2D ctx = canvas.context2D;
 
 	WebSocket ws_recv = new WebSocket("ws://" + window.location.host + "/recvdata");
 	ws_recv.onMessage.listen((event) {
