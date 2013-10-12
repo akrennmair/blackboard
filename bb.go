@@ -8,15 +8,15 @@ import (
 
 type NewConn struct {
 	conn *websocket.Conn
-	ch chan []int
+	ch chan []float64
 }
 
-var new_coords chan []int
+var new_coords chan []float64
 var add_conn chan NewConn
 var del_conn chan *websocket.Conn
 
 func recvdataServer(ws *websocket.Conn) {
-	new_coords := make(chan []int, 10)
+	new_coords := make(chan []float64, 10)
 	newConn := NewConn{conn: ws, ch: new_coords}
 	add_conn <- newConn
 	for {
@@ -32,7 +32,7 @@ func recvdataServer(ws *websocket.Conn) {
 }
 
 func senddataServer(ws *websocket.Conn) {
-	var coords []int
+	var coords []float64
 	for {
 		err := websocket.JSON.Receive(ws, &coords)
 		if err != nil {
@@ -45,7 +45,7 @@ func senddataServer(ws *websocket.Conn) {
 }
 
 func dispatch_coords() {
-	conns := make(map[*websocket.Conn]chan []int)
+	conns := make(map[*websocket.Conn]chan []float64)
 	for {
 		select {
 		case coords := <-new_coords:
@@ -62,7 +62,7 @@ func dispatch_coords() {
 }
 
 func main() {
-	new_coords = make(chan []int, 1)
+	new_coords = make(chan []float64, 1)
 	add_conn = make(chan NewConn, 10)
 	del_conn = make(chan *websocket.Conn, 10)
 	go dispatch_coords()

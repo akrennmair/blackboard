@@ -10,8 +10,9 @@ void main() {
 	List<int> coords;
 	int left_offset, top_offset;
 
-	left_offset = canvas.client.left;
-	top_offset = canvas.client.top;
+	Rectangle rect = canvas.getBoundingClientRect();
+	left_offset = rect.left;
+	top_offset = rect.top;
 
 	canvas.onMouseDown.listen( (MouseEvent e) {
 		mouseDown = true;
